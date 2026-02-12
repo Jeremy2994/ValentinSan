@@ -1,39 +1,28 @@
 const card = document.getElementById("card");
 const noBtn = document.getElementById("noBtn");
-const bigYes = document.getElementById("bigYes");
+const finalCard = document.getElementById("finalCard");
 
-card.addEventListener("click", () => {
-    card.classList.add("open");
+let openedOnce = false; // controla el primer giro
 
-    setTimeout(() => {
-        bigYes.classList.add("show");
-    }, 3000);
+// Voltear carta SOLO la primera vez al hacer clic
+card.addEventListener("click", (e) => {
+    if (openedOnce) return;
+
+    card.classList.add("flipped");
+    openedOnce = true;
 });
 
-noBtn.addEventListener("mouseover", moveNo);
-noBtn.addEventListener("touchstart", moveNo);
+// Botón NO → NO hace nada con la carta
+noBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); // 🚫 evita que el clic llegue a la carta
+    noBtn.style.display = "none"; // desaparece
+});
 
-function moveNo() {
-    const x = Math.random() * 200 - 100;
-    const y = Math.random() * 200 - 100;
-    noBtn.style.transform = `translate(${x}px, ${y}px)`;
-}
-
+// Botón SÍ → voltea y muestra la carta final
 function sayYes() {
-    document.getElementById("response").textContent =
-        "¡Vamos por unos rollos de Sushi! 💕🥰";
-}
-
-const sunflowers = document.querySelectorAll(".sunflowers");
-
-card.addEventListener("click", () => {
-    card.classList.add("open");
-
-    sunflowers.forEach(flower => {
-        flower.style.transform = "translateY(-50%) scale(1)";
-    });
-
+    card.classList.add("flipped"); // se asegura del giro
     setTimeout(() => {
-        bigYes.classList.add("show");
-    }, 3000);
-});
+        card.style.display = "none";
+        finalCard.style.display = "block";
+    }, 600); // tiempo acorde a la animación
+}
